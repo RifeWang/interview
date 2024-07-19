@@ -5,7 +5,7 @@
 
 Redis 是一个高性能的 key-value 内存数据库，常用于缓存、计数器、排行榜、社交网络、消息队列等多种场景。
 
-QPS 可以达到 10万/秒，具体环境可以使用 redis-benchmark 进行测试。
+QPS 可以达到 10万/秒（这意味着单条指令处理速度 ~10 微妙），具体环境可以使用 redis-benchmark 进行测试。
 
 ## 数据类型
 
@@ -31,14 +31,32 @@ QPS 可以达到 10万/秒，具体环境可以使用 redis-benchmark 进行测�
 每种数据类型内部有多种编码实现方式，改进内部编码对外部的数据类型和命令没有影响。
 
 高级数据类型：
-- `BitMap`
-- `Hyperloglog`：概率数据结构，用于估计集合的基数
-- `Bloom Filter`：布隆过滤器
-- `Geo`
+- `JSON`
+- `Streams`：append-only 只可追加的流
+- `Geospatial`
+- `Bitmaps`
+- `Bitfields`
+- `Probabilistic`
+  - `Hyperloglog`：概率数据结构，用于估计集合的基数
+  - `Bloom Filter`：布隆过滤器，插入性能更好，不能删除元素
+  - `Cuckoo filter`：检查性能更好，允许删除
+  - `t-digest`：估算数据流中的百分位数
+  - `Top-K`：估计数据流中排名最靠前的 K 个元素
+  - `Count-min sketch`：估计数据流中元素的频率
+- `Time series`
 - `Pub/Sub`
-- `Stream`：append-only 只可追加的流
 
-其它：
+### 高级数据类型
+
+通过四大模块提供了除了缓存之外的更多特性：
+- `RedisJSON`: 操作 JSON 数据
+- `RediSearch`: 查询与搜索（包括全文检索、向量搜索、GEO 地理位置等）
+- `RedisTimeSeries`: 时序数据
+- `RedisBloom`: 概率计算
+
+
+### 其它
+
 - `pipeline`:
   - 将多个命令打包到一起发送给 redis 然后逐个执行，最后返回
   - pipeline 的多个命令必须没有相互关联
