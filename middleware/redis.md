@@ -108,16 +108,25 @@ Redis Cluster：
 
 ### Cache Aside Pattern 旁路缓存策略
 
+应用程序负责管理缓存。
+
 查询：
 - 从缓存中读取数据；
 - 如果缓存命中，则直接返回数据；
 - 如果缓存不命中，则从数据库中查询数据；
 - 查询到数据后，将数据写入到缓存中，并且返回给用户。
 
-更新：
+更新/删除：
 - 更新数据库中的记录；
 - 删除缓存记录。
 
+### 其它
+
+- Read-Through: 读时由 cache 从 database 取数据
+- Write-Through: 写时由 cache 写入 database
+- Write-Behind: 写时由 cache 异步写入 database
+
+aside & through: aside 是应用程序操作数据同步，through 是缓存系统自身进行操作。
 
 ## 缓存常见问题
 
