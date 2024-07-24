@@ -37,25 +37,6 @@
 - `503`: Service Unavailable 服务不可用
 - `504`: Gateway timeout
 
-
-## HTTPS
-
-HTTPS = HTTP + SSL/TLS , 采用混合加密机制
-- 使用公开密钥加密（非对称加密）交换密钥
-- 使用共享密钥加密（对称加密）进行通信
-
-## HTTP2/3
-
-- 头部压缩
-- 二进制传输，数据流，分包
-- 多路复用
-- 服务器推送
-
-HTTP/3 QUIC
-- 基于 UDP ，增加可靠性传输
-- 实现快速握手（ TCP + TLS 需要两次握手 ）
-- 多路复用，同一个物理连接上可以有多个独立的逻辑数据流，互不影响
-
 ## HTTP 缓存
 缓存控制，协商缓存相关的头部之间的优先级关系
 
@@ -110,6 +91,41 @@ HTTP/3 QUIC
 www.alibaba.com. :  . 根域名 > .com > .alibaba.com > www.alibaba.com
 
 
-简述 CDN 原理？
+## HTTPS
 
-通过智能调度 DNS 去指定最优的 CDN 节点
+HTTPS = HTTP + SSL/TLS , 采用混合加密机制
+- 使用公开密钥加密（非对称加密）交换密钥
+- 使用共享密钥加密（对称加密）进行通信
+
+## HTTP2/3
+
+HTTP/1.1 的缺点：
+- 请求-响应模型，队首阻塞
+- Header 头部重复且巨大
+- 文本传输
+- 服务器不能主动推送
+
+
+HTTP/2 ：
+* 优点：
+  - Header 头部压缩：两端维护字典，传递索引号，降低了数据传输大小
+  - 二进制传输，多路复用，TCP -> stream -> message -> frame：
+    - 1 个 TCP 连接包含一个或者多个 Stream，Stream 是 HTTP/2 并发的关键技术；
+    - Stream 里可以包含 1 个或多个 Message，Message 对应 HTTP/1 中的请求或响应，由 HTTP 头部和包体构成；
+    - Message 里包含一条或者多个 Frame，Frame 是 HTTP/2 最小单位，以二进制压缩格式存放 HTTP/1 中的内容（头部和包体）；
+  - 服务器推送
+* 缺点：基于 TCP 和 SSL/TLS
+  - 队首阻塞：HTTP/2 多个请求在一个 TCP 连接中，当 TCP 丢包时，整个 TCP 都要等待重传，该 TCP 连接中的所有请求都会被阻塞。
+  - TCP 与 TLS 的握手延迟
+  - 网络迁移需要重新连接：一条 TCP 连接由（源 IP、源端口、目的 IP、目的端口）确定，当网络环境变化比如 4G 切换成 WiFi 时需要重新建立连接，另外 TCP 协议存在「慢启动」的特性。
+
+
+HTTP/3 QUIC ：基于 UDP ，在应用层增加可靠性传输
+- 无队首阻塞：基于 UDP ，多个 stream 互不影响
+- 实现快速握手，连接建立更快
+- 连接迁移：不使用四元组，而是通过「连接 ID」来标记通信的两个端点
+
+
+## 参考文章
+
+- https://xiaolincoding.com/network/2_http/http2.html
