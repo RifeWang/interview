@@ -45,20 +45,18 @@
 - [MySQL](./storage/mysql.md)
 - [Clickhouse]()
 
-## 环境
+## 操作系统
 
-- [Docker](./environment/docker.md)
-- [Kubernetes](./environment/kubernetes.md)
+- [Linux](./system/linux.md)
+- [Docker](./system/docker.md)
+- [Kubernetes](./system/kubernetes.md)
 - [CICD]()
 - [SRE]()
 
-## 操作系统
-
-- [Linux]()
-
-## 编程语言
+## 编码
 
 - [Go](./language/go.md)
+- [设计模式]()
 
 ## 系统架构
 

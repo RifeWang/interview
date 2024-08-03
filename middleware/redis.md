@@ -7,6 +7,8 @@ Redis 是一个高性能的 key-value 内存数据库，常用于缓存、计数
 
 QPS 可以达到 10万/秒（这意味着单条指令处理速度 ~10 微妙），具体环境可以使用 redis-benchmark 进行测试。
 
+Redis 支持的最大连接数默认为 10000，取决于 [redis.conf 配置文件中的 maxclients](https://redis.io/docs/latest/operate/oss_and_stack/management/config-file/)。
+
 ## 数据类型
 
 基本数据类型及内部编码：
