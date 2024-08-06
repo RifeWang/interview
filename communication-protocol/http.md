@@ -80,22 +80,12 @@
 `Transfer-Encoding: chunked` 表示 stream 传输，数据是 chunked
 
 
-## DNS 寻址过程？
-
-`DNS`: Domain Name System 域名系统
-本地 /etc/hosts 域名映射
-本地 /etc/resolv.conf 找域名服务器
-
-浏览器 DNS 缓存 -> 本地 DNS 缓存 -> 根域名服务器，返回下一级的 DNS 服务器 -> 递归一级一级的找
-
-www.alibaba.com. :  . 根域名 > .com > .alibaba.com > www.alibaba.com
-
-
 ## HTTPS
 
 HTTPS = HTTP + SSL/TLS , 采用混合加密机制
 - 使用公开密钥加密（非对称加密）交换密钥
 - 使用共享密钥加密（对称加密）进行通信
+
 
 ## HTTP2/3
 
@@ -124,6 +114,27 @@ HTTP/3 QUIC ：基于 UDP ，在应用层增加可靠性传输
 - 无队首阻塞：基于 UDP ，多个 stream 互不影响
 - 实现快速握手，连接建立更快
 - 连接迁移：不使用四元组，而是通过「连接 ID」来标记通信的两个端点
+
+
+## DNS 寻址过程？
+
+`DNS`: Domain Name System 域名系统
+
+过程：
+1. 浏览器 DNS 缓存
+2. 本地操作系统 DNS 缓存
+3. 查询 `/etc/hosts` 文件
+4. DNS 查询：
+  - 域名服务器（`/etc/resolv.conf` 文件），根域名服务器 -> 顶级域名服务器 -> 递归下级域名服务器
+  - www.google.com. :  . 根域名 > .com > .google.com > www.google.com
+
+HTTP 建立在 TCP 连接之上，TCP 在 IP 层之上，所以需要先进行 DNS 确认 IP 地址才能建立 TCP 连接。
+
+
+## HTTP Keep-Alive & TCP keepalive
+
+- HTTP 的 `Connection: keep-alive` 由应用程序实现，使得一个 TCP 连接可以处理多个 HTTP 请求响应。
+- TCP 的 keepalive 由内核实现，用来检查长时间没有数据交互时对方是否还在线，防止中间设备（如 NAT）关闭连接。
 
 
 ## 参考文章

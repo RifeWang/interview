@@ -153,7 +153,7 @@ Redis Cluster：
 
 - Read-Through: 读时由 cache 从 database 取数据
 - Write-Through: 写时由 cache 写入 database
-- Write-Behind: 写时由 cache 异步写入 database
+- Write-Behind（Write-Back）: 写时由 cache 异步写入 database
 
 aside & through: aside 是应用程序操作数据同步，through 是缓存系统自身进行操作。
 
@@ -173,6 +173,26 @@ aside & through: aside 是应用程序操作数据同步，through 是缓存系�
   - 过期时间取随机值
   - 多级缓存
   - 限流
+
+
+## 优化
+
+- 配置：
+  - 操作系统和硬件：避免 swap
+  - Redis配置：
+    - 开启多线程
+    - 监控慢日志
+    - 避免 RDB 和 AOF 的影响
+    - 禁用内存大页（默认行为）
+- schema：
+  - 选择合理的数据类型，越紧凑效率越高，避免大 key
+  - 适当的过期策略
+  - 合理的 key 设计，尽量避免相关连的 key 分布于不同的槽
+- 使用：
+  - 连接池
+  - 改善网络通信：使用多指令提交或 pipeline 避免频繁的 RTT
+    - 注意：在 cluster 模式下，涉及多个 key 的操作只有在所有 key 属于同一个哈希槽时才能执行。
+  - 避免单个指令执行时间过长从而阻塞整个主线程
 
 
 ## 参考文章
