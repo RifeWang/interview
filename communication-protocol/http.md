@@ -125,10 +125,20 @@ HTTP/3 QUIC ：基于 UDP ，在应用层增加可靠性传输
 2. 本地操作系统 DNS 缓存
 3. 查询 `/etc/hosts` 文件
 4. DNS 查询：
-  - 域名服务器（`/etc/resolv.conf` 文件），根域名服务器 -> 顶级域名服务器 -> 递归下级域名服务器
+  - 向域名服务器（`/etc/resolv.conf`）发起查询：
+    - 域名服务器地址可以是：
+      - ISP 域名服务器
+      - 公共域名服务器 Google (8.8.8.8) / Cloudflare (1.1.1.1)
+    - 多数情况下我们的电脑会通过路由器连接网络，这时 `/etc/resolv.conf` 的 nameserver 指向的就是路由器的 WAN IP 如 192.168.3.1
+  - 递归查询：根域名服务器 -> 顶级域名服务器 -> 权威域名服务器（存储真实的 DNS 记录）
   - www.google.com. :  . 根域名 > .com > .google.com > www.google.com
 
 HTTP 建立在 TCP 连接之上，TCP 在 IP 层之上，所以需要先进行 DNS 确认 IP 地址才能建立 TCP 连接。
+
+DNS 协议：
+- 主要协议: UDP (Port 53)
+- 辅助/后备协议: TCP (Port 53)
+- 增强的安全协议: DNS over TLS (Port 853), DNS over HTTPS (Port 443)
 
 
 ## HTTP Keep-Alive & TCP keepalive
