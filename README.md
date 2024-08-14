@@ -33,7 +33,7 @@
 
 ## 负载均衡 & 网关
 
-- [k8s ingress]()
+- [Load Balancer](./load-balance/load-balancer.md)
 
 ## 中间件
 
@@ -60,8 +60,10 @@
 
 ## 系统架构
 
+- [架构师成长路径及角色特质](./architecture/arch-role.md)
+- [架构师必备基础知识](./architecture/arch.md)
+- [软实力](./architecture/soft-skill.md)
+
 - [分布式系统]()
 - [微服务架构]()
 - [DDD 领域驱动设计]()
-
-- [软实力](./architecture/soft.md)
