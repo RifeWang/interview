@@ -147,6 +147,31 @@ CAP：（只能满足两者 CP / AP）
     - 复制延迟
 
 
+## Million RPS
+
+理论分析系统是否能够支撑百万并发？
+
+一个比较典型的系统架构为：
+- 网关层：Load Balancer / API Gateway
+- 服务层：HTTP Server
+- 中间件：Redis、MQ
+- 存储层：MySQL
+
+忽略业务复杂性，依次分析：
+- LB：常用软件 LB 支持的 RPS 从几万到几十万不等，在高性能硬件配置的情况下能支持百万请求转发。云服务商提供的 LB 宣称支持百万、千万级别。
+- HTTP Server：RPS 从几万到几十万不等，甚至几百万，参考 [Web Framework Benchmark](https://www.techempower.com/benchmarks/#section=data-r22&test=fortune)。
+- Redis：根据集群的线性扩展性理论，Redis Cluster 可以支撑百万级、甚至千万 QPS。AWS 扩展到了单集群 5 亿 QPS。
+- MQ：转换成接受百万条消息的能力，MQ 很容易做到。
+- MySQL：根据某云服务商提供的数据，16C64G 并发度 128 支持的 QPS 也不到 14 万，另外还有连接数和线程的限制，数据库是一个明显的瓶颈点，只能做分库、缓存、限流。
+
+网络带宽规格：
+- 10 Gbps（10 Gigabit Ethernet, 10GBASE-T）: 用于数据中心、高性能计算（HPC）和企业网络。
+- 40 Gbps（40 Gigabit Ethernet, 40GBASE-T）: 多用于数据中心和高吞吐量应用。
+- 100 Gbps（100 Gigabit Ethernet, 100GBASE-T）: 高端数据中心和服务提供商网络。
+
+10 Gbps = 1.25 GB/s，假设每个请求大小是 1 KB，那么 1 million 请求需要 1 GB，网络负载很接近极限了。
+
+
 ## 参考资料
 
 - 《系统架构设计师教程》
