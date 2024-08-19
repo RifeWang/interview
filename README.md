@@ -55,8 +55,8 @@
 
 ## 编码
 
-- [Go](./language/go.md)
-- [设计模式]()
+- [Go](./coding/go.md)
+- [设计模式](./coding/design-pattern.md)
 
 ## 系统架构
 
