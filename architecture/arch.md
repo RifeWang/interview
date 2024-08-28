@@ -163,6 +163,30 @@ SRE 黄金指标：
     - 消息队列
     - 限流
 
+### 性能数据估测值（Numbers everyone should know）
+
+| Operation                          | Latency (ns) | Latency (µs/ms)     | Comparison                               |
+| ---------------------------------- | ------------ | ------------------- | ---------------------------------------- |
+| L1 cache reference                 | 0.5          |                     |                                          |
+| Branch mispredict                  | 5            |                     |                                          |
+| L2 cache reference                 | 7            |                     | 14x L1 cache                             |
+| Mutex lock/unlock                  | 25           |                     |                                          |
+| Main memory reference              | 100          |                     | 14x L2 cache, 200x L1 cache              |
+| Compress 1K bytes with Snappy      | 3,000        | 3 µs                |                                          |
+| Read 1 MB sequentially from memory | 20,000       | 20 µs               | ~50GB/sec DDR5                           |
+| Read 1 MB sequentially from NVMe   | 100,000      | 100 µs              | ~10GB/sec NVMe, 5x memory                |
+| Round trip within same datacenter  | 500,000      | 500 µs              |                                          |
+| Read 1 MB sequentially from SSD    | 2,000,000    | 2,000 µs (2 ms)     | ~0.5GB/sec SSD, 100x memory, 20x NVMe    |
+| Read 1 MB sequentially from HDD    | 6,000,000    | 6,000 µs (6 ms)     | ~150MB/sec 300x memory, 60x NVMe, 3x SSD |
+| Send 1 MB over 1 Gbps network      | 10,000,000   | 10,000 µs (10 ms)   |                                          |
+| Disk seek                          | 10,000,000   | 10,000 µs (10 ms)   | 20x datacenter roundtrip                 |
+| Send packet CA->Netherlands->CA    | 150,000,000  | 150,000 µs (150 ms) |                                          |
+
+简记：
+- 内存（10GB/s，100us），磁盘（HDD 100MB/s，10ms），相差 100 倍。
+- SSD 与 HDD 相差 5 倍。
+- 1Gbps 网络发送 1MB 数据需要 10ms。
+
 
 ## 分布式
 
@@ -235,3 +259,5 @@ CAP：（只能满足两者 CP / AP）
 - 《系统架构设计师教程》
 - 《高并发系统设计40问》
 - 《Designing Data-Intensive Applications》
+- https://static.googleusercontent.com/media/sre.google/en//static/pdf/rule-of-thumb-latency-numbers-letter.pdf
+- https://gist.github.com/BlackHC/2d0a3a21542b524a7cf2f8eac977481e
